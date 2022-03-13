@@ -13,9 +13,12 @@ class CategoryProductTable extends Migration
      */
     public function up()
     {
+        //pivot table
+        //solves the many to many relationship
+        //name conversion: modals involved by alphabetic order
         Schema::create('category_product', function (Blueprint $table) {
-            $table->integer('category_id')->unsigned();
-            $table->integer('product_id')->unsigned();
+            $table->integer('category_id')->unsigned();//FK
+            $table->integer('product_id')->unsigned();//FK
 
             $table->foreign('category_id')->references('id')->on('categories');
             $table->foreign('product_id')->references('id')->on('products');

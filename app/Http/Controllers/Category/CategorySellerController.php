@@ -16,18 +16,19 @@ class CategorySellerController extends ApiController
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index(Category $category)
     {
         $this->allowedAdminAction();
-        
+
+        //which sellers are for a particular category
         $sellers = $category->products()
-            ->with('seller')
+            ->with('seller')//category does not have a direct relation with seller so we go through the products
             ->get()
             ->pluck('seller')
             ->unique()
-            ->values();
+            ->values();//to avoid empty elements
 
         return $this->showAll($sellers);
     }

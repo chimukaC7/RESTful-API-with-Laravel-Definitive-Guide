@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => 'images',
+    'default' => 'images',//selected default storage system
 
     /*
     |--------------------------------------------------------------------------
@@ -57,7 +57,7 @@ return [
 
         'images' => [
             'driver' => 'local',
-            'root' => public_path('img'),
+            'root' => public_path('img'),//folder name
             'visibility' => 'public',
         ],
 

@@ -17,19 +17,21 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        DB::statement('SET FOREIGN_KEY_CHECKS = 0');
+        DB::statement('SET FOREIGN_KEY_CHECKS = 0');//disable foreign key checks
 
         User::truncate();
         Category::truncate();
         Product::truncate();
         Transaction::truncate();
-        DB::table('category_product')->truncate();
+        DB::table('category_product')->truncate();//pivot table
 
+        //disabling the event listeners when seeding the database
         User::flushEventListeners();
         Category::flushEventListeners();
         Product::flushEventListeners();
         Transaction::flushEventListeners();
 
+        //quantities
         $usersQuantity = 1000;
         $categoriesQuantity = 30;
         $productsQuantity = 1000;
@@ -38,11 +40,13 @@ class DatabaseSeeder extends Seeder
         factory(User::class, $usersQuantity)->create();
         factory(Category::class, $categoriesQuantity)->create();
 
-        factory(Product::class, $productsQuantity)->create()->each(
-            function ($product) {
-                $categories = Category::all()->random(mt_rand(1, 5))->pluck('id');
+        factory(Product::class, $productsQuantity)->create()->each(function   ($product) {
+                $categories = Category::all()->random(mt_rand(1, 5))->pluck('id');//obtain randomly categories
+            //we only need the id of the category hence we pluck
 
-                $product->categories()->attach($categories);
+            //receives an array of category id
+                $product->categories()->attach($categories);//the attach function receives an array of category id that are going to be
+                //associated with that specific product
             });
 
         factory(Transaction::class, $transactionsQuantity)->create();

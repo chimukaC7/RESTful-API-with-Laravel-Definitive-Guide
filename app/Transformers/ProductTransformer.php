@@ -20,7 +20,7 @@ class ProductTransformer extends TransformerAbstract
             'details' => (string)$product->description,
             'stock' => (int)$product->quantity,
             'situation' => (string)$product->status,
-            'picture' => url("img/{$product->image}"),
+            'picture' => url("img/{$product->image}"),//url to image,include the storage folder
             'seller' => (int)$product->seller_id,
             'creationDate' => (string)$product->created_at,
             'lastChange' => (string)$product->updated_at,
@@ -45,7 +45,7 @@ class ProductTransformer extends TransformerAbstract
                 ],
                 [
                     'rel' => 'seller',
-                    'href' => route('sellers.show', $product->seller_id),
+                    'href' => route('sellers.show', $product->seller_id),//notice
                 ],
             ]
         ];
@@ -69,6 +69,7 @@ class ProductTransformer extends TransformerAbstract
         return isset($attributes[$index]) ? $attributes[$index] : null;
     }
 
+    //for use in the validation response to map transformed key names to original key names
     public static function transformedAttribute($index)
     {
         $attributes = [

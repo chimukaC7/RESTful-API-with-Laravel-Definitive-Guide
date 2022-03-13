@@ -16,7 +16,7 @@ class ProductController extends ApiController
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
@@ -29,7 +29,7 @@ class ProductController extends ApiController
      * Display the specified resource.
      *
      * @param  \App\Product  $product
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show(Product $product)
     {

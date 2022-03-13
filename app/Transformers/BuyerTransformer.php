@@ -29,23 +29,23 @@ class BuyerTransformer extends TransformerAbstract
                     'href' => route('buyers.show', $buyer->id),
                 ],
                 [
-                    'rel' => 'buyer.categories',
+                    'rel' => 'buyer.categories',//A link to all the categories on which this buyer purchased something
                     'href' => route('buyers.categories.index', $buyer->id),
                 ],
                 [
-                    'rel' => 'buyer.products',
+                    'rel' => 'buyer.products',//A link to the products purchased by this buyer
                     'href' => route('buyers.products.index', $buyer->id),
                 ],
                 [
-                    'rel' => 'buyer.sellers',
+                    'rel' => 'buyer.sellers',//A link to the list of sellers of this buyer
                     'href' => route('buyers.sellers.index', $buyer->id),
                 ],
                 [
-                    'rel' => 'buyer.transactions',
+                    'rel' => 'buyer.transactions',//A link to the transactions/purchases of this buyer
                     'href' => route('buyers.transactions.index', $buyer->id),
                 ],
                 [
-                    'rel' => 'user',
+                    'rel' => 'user',//A link to the user profile of this user.
                     'href' => route('users.show', $buyer->id),
                 ],
             ],
@@ -67,6 +67,7 @@ class BuyerTransformer extends TransformerAbstract
         return isset($attributes[$index]) ? $attributes[$index] : null;
     }
 
+    //for use in the validation response to map transformed key names to original key names
     public static function transformedAttribute($index)
     {
         $attributes = [

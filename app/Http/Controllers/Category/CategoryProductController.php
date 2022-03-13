@@ -16,11 +16,12 @@ class CategoryProductController extends ApiController
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index(Category $category)
     {
-        $products = $category->products;
+        //a list of products for a specific category
+        $products = $category->products;//we have a direct relationship btn category and product
 
         return $this->showAll($products);
     }

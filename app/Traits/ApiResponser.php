@@ -10,118 +10,140 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 trait ApiResponser
 {
-	private function successResponse($data, $code)
-	{
-		return response()->json($data, $code);
-	}
+    private function successResponse($data, $code)
+    {
+        return response()->json($data, $code);
+    }
 
-	protected function errorResponse($message, $code)
-	{
-		return response()->json(['error' => $message, 'code' => $code], $code);
-	}
+    protected function errorResponse($message, $code)
+    {
+        //return response()->json(['error' => $message, 'code' => $code], $code);
+        return response()->json(['status_code' => $code, 'message' => $message], $code);
+    }
 
-	protected function showAll(Collection $collection, $code = 200)
-	{
-		if ($collection->isEmpty()) {
-			return $this->successResponse(['data' => $collection], $code);
-		}
+    /*
+     * So, basically for the methods that return a list of instances, we are going to use the "showAll" and
+       for the methods that return a specific instance, we are going to use the "showOne".
+      -Remember that the "showAll" and "showOne" methods use the 200 code by default.
+     * */
 
-		$transformer = $collection->first()->transformer;
+//    protected function showAll(Collection $collection, $code = 200){
+//        return $this->successResponse(['data' => $collection], $code);
+//    }
 
-		$collection = $this->filterData($collection, $transformer);
-		$collection = $this->sortData($collection, $transformer);
-		$collection = $this->paginate($collection);
-		$collection = $this->transformData($collection, $transformer);
-		$collection = $this->cacheResponse($collection);		
+    protected function showAll(Collection $collection, $code = 200)
+    {
+        if ($collection->isEmpty()) {//since we are using the first element, what happens if it is empty
+            return $this->successResponse(['data' => $collection], $code);
+        }
 
-		return $this->successResponse($collection, $code);
-	}
+        $transformer = $collection->first()->transformer;//we can obtain the transformer for whatever position,first,last or middle
+        //so we obtain the transformer based on the first element of the collection
 
-	protected function showOne(Model $instance, $code = 200)
-	{
-		$transformer = $instance->transformer;
+        $collection = $this->filterData($collection, $transformer);
+        //$collection = $this->sortData($collection);//sorting by the original model attributes
+        $collection = $this->sortData($collection, $transformer);//sorting by the transformation attributes
+        $collection = $this->paginate($collection);
+        $collection = $this->transformData($collection, $transformer);//transform the collection
+        $collection = $this->cacheResponse($collection);
 
-		$instance = $this->transformData($instance, $transformer);
+        return $this->successResponse($collection, $code);
+    }
 
-		return $this->successResponse($instance, $code);
-	}
+    //changed from $modal to $instance
+    protected function showOne(Model $instance, $code = 200)
+    {
+        $transformer = $instance->transformer;
 
-	protected function showMessage($message, $code = 200)
-	{
-		return $this->successResponse(['data' => $message], $code);
-	}
+        $instance = $this->transformData($instance, $transformer);
 
-	protected function filterData(Collection $collection, $transformer)
-	{
-		foreach (request()->query() as $query => $value) {
-			$attribute = $transformer::originalAttribute($query);
+        return $this->successResponse($instance, $code);
+    }
 
-			if (isset($attribute, $value)) {
-				$collection = $collection->where($attribute, $value);
-			}
-		}
+    protected function showMessage($message, $code = 200)
+    {
+        return $this->successResponse(['data' => $message], $code);
+    }
 
-		return $collection;
-	}
+    protected function filterData(Collection $collection, $transformer)
+    {
+        foreach (request()->query() as $query => $value) {
+            $attribute = $transformer::originalAttribute($query);//retrieving the attribute
 
-	protected function sortData(Collection $collection, $transformer)
-	{
-		if (request()->has('sort_by')) {
-			$attribute = $transformer::originalAttribute(request()->sort_by);
+            if (isset($attribute, $value)) {
+                $collection = $collection->where($attribute, $value);
+            }
+        }
 
-			$collection = $collection->sortBy->{$attribute};
-		}
+        return $collection;
+    }
 
-		return $collection;
-	}
+    //Sorting results by any attribute
+    protected function sortData(Collection $collection, $transformer)
+    {
+        if (request()->has('sort_by')) {
+            //$attribute = request()->sort_by;//sorting using the original model's method
+            $attribute = $transformer::originalAttribute(request()->sort_by);//sorting using the transformed attributes
 
-	protected function paginate(Collection $collection)
-	{
-		$rules = [
-			'per_page' => 'integer|min:2|max:50',
-		];
+            $collection = $collection->sortBy->{$attribute};
+        }
 
-		Validator::validate(request()->all(), $rules);
+        return $collection;
+    }
 
-		$page = LengthAwarePaginator::resolveCurrentPage();
+    //can be used independently
+    protected function paginate(Collection $collection)
+    {
+        $rules = [
+            'per_page' => 'integer|min:2|max:50',//restricting the min and max page size
+        ];
 
-		$perPage = 15;
-		if (request()->has('per_page')) {
-			$perPage = (int) request()->per_page;
-		}
+        Validator::validate(request()->all(), $rules);
 
-		$results = $collection->slice(($page - 1) * $perPage, $perPage)->values();
+        $page = LengthAwarePaginator::resolveCurrentPage();//current page
 
-		$paginated = new LengthAwarePaginator($results, $collection->count(), $perPage, $page, [
-			'path' => LengthAwarePaginator::resolveCurrentPath(),
-		]);
+        //PerPage----------------------------------------------
+        $perPage = 15;
+        if (request()->has('per_page')) {//allowing custom page size
+            $perPage = (int) request()->per_page;//change the default value for a different value
+        }
+        //PerPage----------------------------------------------
 
-		$paginated->appends(request()->all());
+        $results = $collection->slice(($page - 1) * $perPage, $perPage)->values();//dividing the collection using the slice
 
-		return $paginated;
+        $paginated = new LengthAwarePaginator($results, $collection->count(), $perPage, $page,
+            [
+                'path' => LengthAwarePaginator::resolveCurrentPath(),
+            ]);
 
-	}
+        $paginated->appends(request()->all());//include the other request parameters
 
-	protected function transformData($data, $transformer)
-	{
-		$transformation = fractal($data, new $transformer);
+        return $paginated;
 
-		return $transformation->toArray();
-	}
+    }
 
-	protected function cacheResponse($data)
-	{
-		$url = request()->url();
-		$queryParams = request()->query();
+    //method receives the data to transform and the respective transformer to be used
+    protected function transformData($data, $transformer)
+    {
+        $transformation = fractal($data, new $transformer);
 
-		ksort($queryParams);
+        return $transformation->toArray();
+    }
 
-		$queryString = http_build_query($queryParams);
+    protected function cacheResponse($data)
+    {
+        $url = request()->url();//differentiate one request from another
+        $queryParams = request()->query();//taking into account the url params
 
-		$fullUrl = "{$url}?{$queryString}";
+        ksort($queryParams);//sort the query params
 
-		return Cache::remember($fullUrl, 30/60, function() use($data) {
-			return $data;
-		});
-	}
+        $queryString = http_build_query($queryParams);
+
+        $fullUrl = "{$url}?{$queryString}";
+
+        //return Cache::remember($fullUrl, 30, function() use($data) {//for Laravel 5.8 and higher, the expiration time is in seconds
+        return Cache::remember($fullUrl, 30 / 60, function () use ($data) {//for laravel 5.8 and lower
+            return $data;
+        });
+    }
 }

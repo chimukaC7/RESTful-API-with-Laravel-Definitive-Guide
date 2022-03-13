@@ -20,6 +20,6 @@ class BuyerPolicy
      */
     public function view(User $user, Buyer $buyer)
     {
-        return $user->id === $buyer->id;
+        return $user->id === $buyer->id;//ensuring that the the user id is actual owner of the resource
     }
 }

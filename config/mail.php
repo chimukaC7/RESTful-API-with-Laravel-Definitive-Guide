@@ -13,6 +13,7 @@ return [
     |
     | Supported: "smtp", "sendmail", "mailgun", "mandrill", "ses",
     |            "sparkpost", "log", "array"
+    the log is very interesting in this case because basically is going to put the contents of the e-mail inside the log file of laravel
     |
     */
 
@@ -55,6 +56,7 @@ return [
     |
     */
 
+    ///source of the mail
     'from' => [
         'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
         'name' => env('MAIL_FROM_NAME', 'Example'),

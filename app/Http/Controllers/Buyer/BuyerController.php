@@ -14,18 +14,21 @@ class BuyerController extends ApiController
         $this->middleware('scope:read-general')->only('index');
         $this->middleware('can:view,buyer')->only('show');
     }
-    
+
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function index()
     {
         $this->allowedAdminAction();
-        
+
+        //so to be sure that a user is a buyer, we need to verify if that specific user has a transaction.
         $buyers = Buyer::has('transactions')->get();
 
+        //return response()->json(['data'=>$buyers],200);
         return $this->showAll($buyers);
     }
 
@@ -33,11 +36,11 @@ class BuyerController extends ApiController
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show(Buyer $buyer)
     {
-        // $buyer = Buyer::has('transactions')->findOrFail($id);
+        // $buyer = Buyer::has('transactions')->findOrFail($id);//helps us to retrieve users who are actually buyers
         return $this->showOne($buyer);
     }
 }

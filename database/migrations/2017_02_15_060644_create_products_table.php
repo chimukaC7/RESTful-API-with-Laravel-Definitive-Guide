@@ -18,14 +18,15 @@ class CreateProductsTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('description', 1000);
-            $table->integer('quantity')->unsigned();
+            $table->integer('quantity')->unsigned();//the quantity cannot be negative
             $table->string('status')->default(Product::UNAVAILABLE_PRODUCT);
-            $table->string('image');
+            $table->string('image')->nullable();
             $table->integer('seller_id')->unsigned();
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('seller_id')->references('id')->on('users');
+            $table->foreign('seller_id')->references('id')->on('users');//using table name and not the modal name
+            //not buyers modal or user modal but users table
         });
     }
 

@@ -7,13 +7,18 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Auth\Access\AuthorizationException;
 
+//So, every method that we define in the ApiController can be used directly in the other controllers.
 class ApiController extends Controller
 {
+    //We can use the trait in every one of our controllers but it is not completely practical because we really don't
+    //need to do that.
+    //Remember that we are extending now from the ApiController.
+    //So, every method that we define in the ApiController can be used directly in the other controllers.
     use ApiResponser;
 
     public function __construct()
     {
-    	$this->middleware('auth:api');
+    	$this->middleware('auth:api');//protecting all the routes of the API
     }
 
     protected function allowedAdminAction()

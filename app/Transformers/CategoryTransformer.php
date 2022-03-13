@@ -28,19 +28,19 @@ class CategoryTransformer extends TransformerAbstract
                     'href' => route('categories.show', $category->id),
                 ],
                 [
-                    'rel' => 'category.buyers',
+                    'rel' => 'category.buyers',//a list of buyers for this category
                     'href' => route('categories.buyers.index', $category->id),
                 ],
                 [
-                    'rel' => 'category.products',
+                    'rel' => 'category.products',//a list of products for this category
                     'href' => route('categories.products.index', $category->id),
                 ],
                 [
-                    'rel' => 'category.sellers',
+                    'rel' => 'category.sellers',//a list of sellers for this category
                     'href' => route('categories.sellers.index', $category->id),
                 ],
                 [
-                    'rel' => 'category.transactions',
+                    'rel' => 'category.transactions',//a list of transactoins for this category
                     'href' => route('categories.transactions.index', $category->id),
                 ],
             ]
@@ -61,6 +61,7 @@ class CategoryTransformer extends TransformerAbstract
         return isset($attributes[$index]) ? $attributes[$index] : null;
     }
 
+    //for use in the validation response to map transformed key names to original key names
     public static function transformedAttribute($index)
     {
         $attributes = [

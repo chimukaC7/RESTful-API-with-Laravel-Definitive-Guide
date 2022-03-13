@@ -14,16 +14,18 @@ class SellerTransactionController extends ApiController
         $this->middleware('scope:read-general')->only('index');
         $this->middleware('can:view,seller')->only('index');
     }
-    
+
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param Seller $seller
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index(Seller $seller)
     {
+        //return a list of transactions for a seller
         $transactions = $seller->products()
-            ->whereHas('transactions')
+            ->whereHas('transactions')//ensure products fetched have transactions
             ->with('transactions')
             ->get()
             ->pluck('transactions')

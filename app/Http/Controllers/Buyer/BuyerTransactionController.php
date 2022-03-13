@@ -18,10 +18,11 @@ class BuyerTransactionController extends ApiController
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function index(Buyer $buyer)
+    public function index(Buyer $buyer)//notice the modal binding
     {
+        //a specific buyer's transactions
         $transactions = $buyer->transactions;
 
         return $this->showAll($transactions);

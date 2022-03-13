@@ -42,7 +42,7 @@ return [
         ],
 
         'api' => [
-            'driver' => 'passport',
+            'driver' => 'passport',//to make the authentication to be handled by passport
             'provider' => 'users',
         ],
     ],

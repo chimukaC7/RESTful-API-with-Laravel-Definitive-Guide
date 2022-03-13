@@ -13,6 +13,7 @@ class ProductCategoryController extends ApiController
     {
         $this->middleware('client.credentials')->only(['index']);
         $this->middleware('auth:api')->except(['index']);
+        //restricting the actions that need the 'manage-product'
         $this->middleware('scope:manage-products')->except('index');
         $this->middleware('can:add-category,product')->only('update');
         $this->middleware('can:delete-category,product')->only('destroy');
@@ -21,7 +22,7 @@ class ProductCategoryController extends ApiController
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index(Product $product)
     {
@@ -33,13 +34,17 @@ class ProductCategoryController extends ApiController
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Product  $product
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Product $product
+     * @param Category $category
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, Product $product, Category $category)
     {
-        //attach, sync, syncWithoutDetach
+        //interacting with a many to many relationship
+        //attach, sync, syncWithoutDetaching
+        //attach method allows duplicates
+        //sync method adds the new but detaches/deletes the other ones
         $product->categories()->syncWithoutDetaching([$category->id]);
 
         return $this->showAll($product->categories);
@@ -49,14 +54,15 @@ class ProductCategoryController extends ApiController
      * Remove the specified resource from storage.
      *
      * @param  \App\Product  $product
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Product $product, Category $category)
     {
-        if (!$product->categories()->find($category->id)) {
+        if (!$product->categories()->find($category->id)) {//check if that specified category exists for the specified product
             return $this->errorResponse('The specified category is not a category of this product', 404);
         }
 
+        //deleting in a many-to-many relationship
         $product->categories()->detach($category->id);
 
         return $this->showAll($product->categories);

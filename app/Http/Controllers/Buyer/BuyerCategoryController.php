@@ -18,14 +18,15 @@ class BuyerCategoryController extends ApiController
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index(Buyer $buyer)
     {
+        //obtain the categories where the buyer made a purchase
         $sellers = $buyer->transactions()->with('product.categories')
             ->get()
             ->pluck('product.categories')
-            ->collapse()
+            ->collapse()//creates a unique list with several lists
             ->unique('id')
             ->values();
 

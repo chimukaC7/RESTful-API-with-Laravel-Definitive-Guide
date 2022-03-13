@@ -12,18 +12,21 @@ class CategoryTransactionController extends ApiController
     {
         parent::__construct();
     }
-    
+
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param Category $category
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function index(Category $category)
     {
         $this->allowedAdminAction();
-        
+
+        //return a list of transactions for a specific category
         $transactions = $category->products()
-            ->whereHas('transactions')
+            ->whereHas('transactions')//ensure the product has at least one transaction,they could have products without transactions
             ->with('transactions')
             ->get()
             ->pluck('transactions')

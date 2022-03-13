@@ -18,18 +18,19 @@ class SellerCategoryController extends ApiController
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index(Seller $seller)
     {
+        //return categories where a seller performed a transaction
         $categories = $seller->products()
-            ->whereHas('categories')
+            ->whereHas('categories')//ensuring the fetched product has category
             ->with('categories')
             ->get()
             ->pluck('categories')
             ->collapse()
             ->unique('id')
-            ->values();
+            ->values();//remove the empty values using values()
 
         return $this->showAll($categories);
     }

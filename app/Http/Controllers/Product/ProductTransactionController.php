@@ -12,11 +12,13 @@ class ProductTransactionController extends ApiController
     {
         parent::__construct();
     }
-    
+
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param Product $product
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function index(Product $product)
     {

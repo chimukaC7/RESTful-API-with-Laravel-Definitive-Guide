@@ -18,7 +18,7 @@ class TransactionController extends ApiController
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
@@ -33,7 +33,7 @@ class TransactionController extends ApiController
      * Display the specified resource.
      *
      * @param  \App\Transaction  $transaction
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show(Transaction $transaction)
     {

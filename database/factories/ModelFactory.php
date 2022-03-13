@@ -19,6 +19,7 @@ use Illuminate\Support\Str;
 */
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
+//factory for users
 $factory->define(User::class, function (Faker\Generator $faker) {
     static $password;
 
@@ -33,6 +34,7 @@ $factory->define(User::class, function (Faker\Generator $faker) {
     ];
 });
 
+//factory for categories
 $factory->define(Category::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->word,
@@ -40,6 +42,7 @@ $factory->define(Category::class, function (Faker\Generator $faker) {
     ];
 });
 
+//factory for products
 $factory->define(Product::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->word,
@@ -47,13 +50,20 @@ $factory->define(Product::class, function (Faker\Generator $faker) {
         'quantity' => $faker->numberBetween(1, 10),
         'status' => $faker->randomElement([Product::AVAILABLE_PRODUCT, Product::UNAVAILABLE_PRODUCT]),
         'image' => $faker->randomElement(['1.jpg', '2.jpg', '3.jpg']),
-        'seller_id' => User::all()->random()->id,
-        // User::inRandomOrder()->first()->id
+        'seller_id' => User::all()->random()->id, // or User::inRandomOrder()->first()->id
+       
     ];
 });
 
+//factory for transaction
 $factory->define(Transaction::class, function (Faker\Generator $faker) {
+
+    //ensuring a user has a product(atleast one product)
+    //obtaining a seller in a random way
     $seller = Seller::has('products')->get()->random();
+
+    //before purchasing, it is a user
+    //after purchasing, it is a buyer
     $buyer = User::all()->except($seller->id)->random();
 
     return [

@@ -19,11 +19,12 @@ class UserTransformer extends TransformerAbstract
             'name' => (string)$user->name,
             'email' => (string)$user->email,
             'isVerified' => (int)$user->verified,
-            'isAdmin' => ($user->admin === 'true'),
+            'isAdmin' => ($user->admin === 'true'),//returns a boolean
             'creationDate' => (string)$user->created_at,
             'lastChange' => (string)$user->updated_at,
-            'deletedDate' => isset($user->deleted_at) ? (string) $user->deleted_at : null,
+            'deletedDate' => isset($user->deleted_at) ? (string) $user->deleted_at : null,//this field can be null
 
+            //HATEOS a way to navigate the API
             'links' => [
                 [
                     'rel' => 'self',
@@ -33,6 +34,8 @@ class UserTransformer extends TransformerAbstract
         ];
     }
 
+    //creating a mapping of the original attributes to the transformed attributes
+    //this is to solve the problem in sorting
     public static function originalAttribute($index)
     {
         $attributes = [
@@ -49,6 +52,7 @@ class UserTransformer extends TransformerAbstract
         return isset($attributes[$index]) ? $attributes[$index] : null;
     }
 
+    //for use in the validation response to map transformed key names to original key names
     public static function transformedAttribute($index)
     {
         $attributes = [

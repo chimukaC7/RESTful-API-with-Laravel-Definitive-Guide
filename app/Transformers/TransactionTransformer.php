@@ -48,6 +48,8 @@ class TransactionTransformer extends TransformerAbstract
         ];
     }
 
+    //creating a mapping of the original attributes to the transformed attributes
+    //this is solve the problem in the sorting
     public static function originalAttribute($index)
     {
         $attributes = [
@@ -63,6 +65,7 @@ class TransactionTransformer extends TransformerAbstract
         return isset($attributes[$index]) ? $attributes[$index] : null;
     }
 
+    //for use in the validation response to map transformed key names to original key names
     public static function transformedAttribute($index)
     {
         $attributes = [

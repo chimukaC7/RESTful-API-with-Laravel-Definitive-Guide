@@ -6,9 +6,10 @@ use App\Product;
 use App\Scopes\SellerScope;
 use App\Transformers\SellerTransformer;
 
-class Seller extends User
+//extends from User
+class  Seller extends User
 {
-	public $transformer = SellerTransformer::class;
+	public $transformer = SellerTransformer::class;//linking the model with its transformer
 
 	protected static function boot()
 	{
@@ -17,6 +18,7 @@ class Seller extends User
 		static::addGlobalScope(new SellerScope);
 	}
 
+    //a seller has several products
     public function products()
     {
     	return $this->hasMany(Product::class);

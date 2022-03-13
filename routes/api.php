@@ -13,10 +13,12 @@ use Illuminate\Http\Request;
 |
 */
 
+//you can specify which methods you either want to use or not
+//php artisan route:list
 /**
  * Buyers
  */
-Route::resource('buyers', 'Buyer\BuyerController', ['only' => ['index', 'show']]);
+Route::resource('buyers', 'Buyer\BuyerController', ['only' => ['index', 'show']]);//specifying which actions are allowed
 Route::resource('buyers.sellers', 'Buyer\BuyerSellerController', ['only' => ['index']]);
 Route::resource('buyers.products', 'Buyer\BuyerProductController', ['only' => ['index']]);
 Route::resource('buyers.categories', 'Buyer\BuyerCategoryController', ['only' => ['index']]);
@@ -25,7 +27,7 @@ Route::resource('buyers.transactions', 'Buyer\BuyerTransactionController', ['onl
 /**
  * Categories
  */
-Route::resource('categories', 'Category\CategoryController', ['except' => ['create', 'edit']]);
+Route::resource('categories', 'Category\CategoryController', ['except' => ['create', 'edit']]);//removing the methods that return the forms i.e create and edit
 Route::resource('categories.buyers', 'Category\CategoryBuyerController', ['only' => ['index']]);
 Route::resource('categories.sellers', 'Category\CategorySellerController', ['only' => ['index']]);
 Route::resource('categories.products', 'Category\CategoryProductController', ['only' => ['index']]);

@@ -18,13 +18,19 @@ class BuyerProductController extends ApiController
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index(Buyer $buyer)
     {
-        $products = $buyer->transactions()->with('product')
+
+        //$products = $buyer->transactions->product;
+
+        //list of products for a specific buyer
+        //eager loading to fetch directly the product within every transaction
+        $products = $buyer->transactions()
+            ->with('product')//calling the product relation inside the transaction
             ->get()
-            ->pluck('product');
+            ->pluck('product');//instead of displaying the transactions, display only the products of those transactions
 
         return $this->showAll($products);
     }

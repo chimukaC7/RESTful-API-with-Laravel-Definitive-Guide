@@ -162,7 +162,11 @@ return [
 
         /*
          * Package Service Providers...
+         * use "php artisan" to verify all is well
          */
+        Laravel\Passport\PassportServiceProvider::class,//add this for passport
+        Laravel\Tinker\TinkerServiceProvider::class,//added
+        Spatie\Fractal\FractalServiceProvider::class,//add this for Fractal
 
         /*
          * Application Service Providers...

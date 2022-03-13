@@ -16,14 +16,15 @@ class CategoryBuyerController extends ApiController
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index(Category $category)
     {
         $this->allowedAdminAction();
-        
+
+        //return all the buyers for a specific category
         $buyers = $category->products()
-            ->whereHas('transactions')
+            ->whereHas('transactions')//ensuring to return the products that have transactions
             ->with('transactions.buyer')
             ->get()
             ->pluck('transactions')
@@ -33,5 +34,6 @@ class CategoryBuyerController extends ApiController
             ->values();
 
         return $this->showAll($buyers);
+        //pagination, in this case we are not directly dealing with the model
     }
 }

@@ -25,8 +25,8 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        Buyer::class => BuyerPolicy::class,
-        Seller::class => SellerPolicy::class,
+        Buyer::class => BuyerPolicy::class,//register the policy
+        Seller::class => SellerPolicy::class,//
         User::class => UserPolicy::class,
         Transaction::class => TransactionPolicy::class,
         Product::class => ProductPolicy::class,
@@ -45,11 +45,15 @@ class AuthServiceProvider extends ServiceProvider
             return $user->isAdmin();
         });
 
-        Passport::routes();
-        Passport::tokensExpireIn(Carbon::now()->addMinutes(5));
+        //add the following for passport
+        Passport::routes();//registering routes for passport
+        Passport::tokensExpireIn(Carbon::now()->addMinutes(5));//to make tokens expire
         Passport::refreshTokensExpireIn(Carbon::now()->addDays(30));
-        Passport::enableImplicitGrant();
+        Passport::enableImplicitGrant();//allowing implicit grant type
 
+        //you need to register your own scopes here
+        //scopes should be modular
+        //scopes apply to clients of the API
         Passport::tokensCan([
             'purchase-product' => 'Create a new transaction for a specific product',
             'manage-products' => 'Create, reade, update, and delete products (CRUD)',

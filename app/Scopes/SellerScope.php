@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Builder;
 
 class SellerScope implements Scope
 {
+    //The GlobalScopes are basically queries or parts of the query that we can automatically add for the operations
+    //over a specific model.
 	public function apply(Builder $builder, Model $model)
 	{
 		$builder->has('products');

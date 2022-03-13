@@ -18,12 +18,15 @@ class SellerController extends ApiController
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
         $this->allowedAdminAction();
-        
+
+        // we need to be careful that in this case, we are going to obtain the users that have products.
+        //it means, in the context of our RESTful API, a user that has at least one product, it is a seller in our system.
+        //It doesn't matter if the user already sold that products. The important thing is that has a product in the system.
         $sellers = Seller::has('products')->get();
 
         return $this->showAll($sellers);
@@ -32,11 +35,12 @@ class SellerController extends ApiController
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Seller $seller
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show(Seller $seller)
     {
+        //$seller = Seller::has('products')->findOrFail($id);
         return $this->showOne($seller);
     }
 }
