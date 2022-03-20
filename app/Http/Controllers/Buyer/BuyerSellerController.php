@@ -26,12 +26,13 @@ class BuyerSellerController extends ApiController
 
         //returning the sellers for a buyer
         $sellers = $buyer->transactions()
-            ->with('seller')//we cannot do it this way becos there doesn't exist a relationship btn transaction and sellers directly,
+            //->with('seller')//we cannot do it this way becos there doesn't exist a relationship btn transaction and sellers directly,
+            //->get()
             //we have to do it through product
             ->with('product.seller')//using a nested relationship through eager loading
             ->get()
             ->pluck('product.seller')
-            ->unique('id')
+            ->unique('id')//we can have repeated sellers, we use the unique method
             ->values();//to avoid empty values
 
         return $this->showAll($sellers);

@@ -11,12 +11,12 @@ class ProductCategoryController extends ApiController
 {
     public function __construct()
     {
-        $this->middleware('client.credentials')->only(['index']);
-        $this->middleware('auth:api')->except(['index']);
-        //restricting the actions that need the 'manage-product'
-        $this->middleware('scope:manage-products')->except('index');
-        $this->middleware('can:add-category,product')->only('update');
-        $this->middleware('can:delete-category,product')->only('destroy');
+//        $this->middleware('client.credentials')->only(['index']);
+//        $this->middleware('auth:api')->except(['index']);
+//        //restricting the actions that need the 'manage-product'
+//        $this->middleware('scope:manage-products')->except('index');
+//        $this->middleware('can:add-category,product')->only('update');
+//        $this->middleware('can:delete-category,product')->only('destroy');
     }
     
     /**
@@ -44,8 +44,8 @@ class ProductCategoryController extends ApiController
         //interacting with a many to many relationship
         //attach, sync, syncWithoutDetaching
         //attach method allows duplicates
-        //sync method adds the new but detaches/deletes the other ones
-        $product->categories()->syncWithoutDetaching([$category->id]);
+        //sync method adds the new but detaches/deletes the other ones even the non duplicates;
+        $product->categories()->syncWithoutDetaching([$category->id]);//since it is an array we can attach several
 
         return $this->showAll($product->categories);
     }
@@ -63,6 +63,7 @@ class ProductCategoryController extends ApiController
         }
 
         //deleting in a many-to-many relationship
+        //removing from the pivot table
         $product->categories()->detach($category->id);
 
         return $this->showAll($product->categories);

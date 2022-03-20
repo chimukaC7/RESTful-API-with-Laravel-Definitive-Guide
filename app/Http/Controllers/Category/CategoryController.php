@@ -11,10 +11,10 @@ class CategoryController extends ApiController//to use the response methods reme
 {
     public function __construct()
     {
-        $this->middleware('client.credentials')->only(['index', 'show']);//specifying which routes to protect
-        $this->middleware('auth:api')->except(['index', 'show']);
-        //using the transformer
-        $this->middleware('transform.input:' . CategoryTransformer::class)->only(['store', 'update']);
+//        $this->middleware('client.credentials')->only(['index', 'show']);//specifying which routes to protect
+//        $this->middleware('auth:api')->except(['index', 'show']);
+//        //using the transformer
+//        $this->middleware('transform.input:' . CategoryTransformer::class)->only(['store', 'update']);
     }
     
     /**
@@ -81,7 +81,7 @@ class CategoryController extends ApiController//to use the response methods reme
 
         //in this case, we don't need to perform any kind of validation because both, the name and the description,
         //are optional but we need to be sure that the user or the client really sent the values
-        $category->fill($request->only([
+        $category->fill($request->only([//fill with the new values received in the request
             'name',
             'description',
         ]));

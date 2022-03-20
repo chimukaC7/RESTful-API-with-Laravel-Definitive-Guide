@@ -79,10 +79,29 @@ class Handler extends ExceptionHandler
 
     }
 
+    //returning HTML and redirecting when required
+    private function isFrontend($request)
+    {
+        //check if request are coming from the web
+        return $request->acceptsHtml() && collect($request->route()->middleware())->contains('web');
+    }
+
     public function handleException($request, Exception $exception)// replace Exception with Throwable
     {
+
+        //ensure exceptions are sent as json
+        //Create a response object from the given validation exception.
         if ($exception instanceof ValidationException) {
-            return $this->convertValidationExceptionToResponse($exception, $request);
+            $errors = $exception->validator->errors()->getMessages();
+
+            if ($this->isFrontend($request)) {
+                //if an ajax request or frontend request
+                return $request->ajax()
+                    ? response()->json($errors, 422)
+                    : redirect()->back()->withInput($request->input())->withErrors($errors);
+            }
+
+            return $this->errorResponse($errors, 422);
         }
 
         if ($exception instanceof ModelNotFoundException) {
@@ -91,12 +110,19 @@ class Handler extends ExceptionHandler
             return $this->errorResponse("Does not exists any {$modelName} with the specified identification", 404);
         }
 
+        //* Convert an authentication exception into an unauthenticated response.
         if ($exception instanceof AuthenticationException) {
-            return $this->unauthenticated($request, $exception);
+
+            if ($this->isFrontend($request)) {
+                return redirect()->guest('login');
+            }
+
+            return $this->errorResponse('Unauthenticated', 401);
         }
 
         //authorization is permission related
-        if ($exception instanceof AuthorizationException) {//we have an authenticated user but that specific user does not have permission to
+        //we have an authenticated user but that specific user does not have permission to
+        if ($exception instanceof AuthorizationException) {
             return $this->errorResponse($exception->getMessage(), 403);//unauthorized
         }
 
@@ -128,6 +154,8 @@ class Handler extends ExceptionHandler
             return redirect()->back()->withInput($request->input());
         }
 
+
+        //Handling unexpected exceptions,
         if (config('app.debug')) {//returning the detail of unexpected exception during debug mode
             return parent::render($request, $exception);//returning a detailed error
         }
@@ -135,51 +163,5 @@ class Handler extends ExceptionHandler
         //Handling unexpected exceptions
         return $this->errorResponse('Unexpected Exception. Try again later', 500);
     }
-
-
-    //returning HTML and redirecting when required
-    private function isFrontend($request)
-    {
-        //check if request are coming from the web
-        return $request->acceptsHtml() && collect($request->route()->middleware())->contains('web');
-    }
-
-    /**
-     * Convert an authentication exception into an unauthenticated response.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Illuminate\Auth\AuthenticationException  $exception
-     * @return \Illuminate\Http\Response
-     */
-    protected function unauthenticated($request, AuthenticationException $exception)
-    {
-        if ($this->isFrontend($request)) {
-            return redirect()->guest('login');
-        }
-
-        return $this->errorResponse('Unauthenticated.', 401);
-    }
-
-    /**
-     * Create a response object from the given validation exception.
-     *
-     * @param  \Illuminate\Validation\ValidationException  $e
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    protected function convertValidationExceptionToResponse(ValidationException $e, $request)//ensure exceptions are sent as json
-    {
-        $errors = $e->validator->errors()->getMessages();
-
-        if ($this->isFrontend($request)) {
-            //if an ajax request or frontend request
-            return $request->ajax()
-                ? response()->json($errors, 422)
-                : redirect()->back()->withInput($request->input())->withErrors($errors);
-        }
-
-        return $this->errorResponse($errors, 422);
-    }
-
 
 }

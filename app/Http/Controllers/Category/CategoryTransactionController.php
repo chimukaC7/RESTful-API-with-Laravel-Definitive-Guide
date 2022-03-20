@@ -10,7 +10,7 @@ class CategoryTransactionController extends ApiController
 {
     public function __construct()
     {
-        parent::__construct();
+        //parent::__construct();
     }
 
     /**
@@ -22,7 +22,7 @@ class CategoryTransactionController extends ApiController
      */
     public function index(Category $category)
     {
-        $this->allowedAdminAction();
+        //$this->allowedAdminAction();
 
         //return a list of transactions for a specific category
         $transactions = $category->products()
@@ -30,7 +30,7 @@ class CategoryTransactionController extends ApiController
             ->with('transactions')
             ->get()
             ->pluck('transactions')
-            ->collapse();
+            ->collapse();//collapsing a list of collections into one
 
         return $this->showAll($transactions);
     }

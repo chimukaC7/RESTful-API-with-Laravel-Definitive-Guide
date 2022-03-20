@@ -16,18 +16,18 @@ class SellerProductController extends ApiController
 {
     public function __construct()
     {
-        parent::__construct();
+        //parent::__construct();
 
-        //using the transformer
-        $this->middleware('transform.input:' . ProductTransformer::class)->only(['store', 'update']);
-
-        //restricting the action that needs the 'manage-products'
-        $this->middleware('scope:manage-products')->except('index');
-
-        $this->middleware('can:view,seller')->only('index');
-        $this->middleware('can:sale,seller')->only('store');
-        $this->middleware('can:edit-product,seller')->only('update');
-        $this->middleware('can:delete-product,seller')->only('destroy');
+//        //using the transformer
+//        $this->middleware('transform.input:' . ProductTransformer::class)->only(['store', 'update']);
+//
+//        //restricting the action that needs the 'manage-products'
+//        $this->middleware('scope:manage-products')->except('index');
+//
+//        $this->middleware('can:view,seller')->only('index');
+//        $this->middleware('can:sale,seller')->only('store');
+//        $this->middleware('can:edit-product,seller')->only('update');
+//        $this->middleware('can:delete-product,seller')->only('destroy');
     }
 
     /**
@@ -65,7 +65,7 @@ class SellerProductController extends ApiController
         $rules = [
             'name' => 'required',
             'description' => 'required',
-            'quantity' => 'required|integer|min:1',
+            'quantity' => ['required','integer','min:1'],
             'image' => 'required|image',//not a file,must be an image
         ];
 
@@ -74,10 +74,12 @@ class SellerProductController extends ApiController
         $data = $request->all();
 
         $data['status'] = Product::UNAVAILABLE_PRODUCT;//default value
+
         //$data['image'] = $request->image->store('path','images');//store('path','file system to use')
         //path is calculated from relatively from the file system config, the public folder
         //storing an image when creating a product
         $data['image'] = $request->image->store('');//store('path','file system to use')
+
         $data['seller_id'] = $seller->id;
 
         $product = Product::create($data);
@@ -104,6 +106,7 @@ class SellerProductController extends ApiController
 
         $this->validate($request, $rules);
 
+        //check owner of the product
         $this->checkSeller($seller, $product);//verify that the user who is trying to update the product is the owner of the product
 
         $product->fill($request->only([
@@ -112,11 +115,11 @@ class SellerProductController extends ApiController
             'quantity',
         ]));
 
+        //if the request has status
         if ($request->has('status')) {
             $product->status = $request->status;
 
-            //if the status of the product is available
-            //and the product does not have categories
+            //if the status of the product is available and the product does not have categories
             if ($product->isAvailable() && $product->categories()->count() == 0) {
                 return $this->errorResponse('An active product must have at least one category', 409);
             }
@@ -155,6 +158,7 @@ class SellerProductController extends ApiController
 
         return $this->showOne($product);
     }
+
 
     protected function checkSeller(Seller $seller, Product $product)
     {

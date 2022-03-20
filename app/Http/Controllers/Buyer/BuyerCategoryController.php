@@ -10,13 +10,13 @@ class BuyerCategoryController extends ApiController
 {
     public function __construct()
     {
-        parent::__construct();
-        $this->middleware('scope:read-general')->only('index');
-        $this->middleware('can:view,buyer')->only('index');
+//        parent::__construct();
+//        $this->middleware('scope:read-general')->only('index');
+//        $this->middleware('can:view,buyer')->only('index');
     }
     
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource.phpartisan
      *
      * @return \Illuminate\Http\JsonResponse
      */

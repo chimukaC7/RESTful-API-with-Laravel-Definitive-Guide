@@ -10,7 +10,7 @@ class ProductTransactionController extends ApiController
 {
     public function __construct()
     {
-        parent::__construct();
+        //parent::__construct();
     }
 
     /**
@@ -22,7 +22,7 @@ class ProductTransactionController extends ApiController
      */
     public function index(Product $product)
     {
-        $this->allowedAdminAction();
+        //$this->allowedAdminAction();
         
         $transactions = $product->transactions;
 

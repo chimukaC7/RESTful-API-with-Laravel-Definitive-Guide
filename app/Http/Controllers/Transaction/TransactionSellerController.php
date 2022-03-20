@@ -11,9 +11,9 @@ class TransactionSellerController extends ApiController
 {
     public function __construct()
     {
-        parent::__construct();
-        $this->middleware('scope:read-general')->only('index');
-        $this->middleware('can:view,transaction')->only('index');
+//        parent::__construct();
+//        $this->middleware('scope:read-general')->only('index');
+//        $this->middleware('can:view,transaction')->only('index');
     }
 
     /**
@@ -24,6 +24,10 @@ class TransactionSellerController extends ApiController
      */
     public function index(Transaction $transaction)
     {
+        //So, basically what we are going to obtain is the specific seller of a transaction.
+        //As you may know there does not exist equally a relationship between transaction and seller.
+        //So, we have to do that through the product relationship because a product has a seller and a transaction has a product.
+
         //seller of that product in the transaction
         $seller = $transaction->product->seller;
 

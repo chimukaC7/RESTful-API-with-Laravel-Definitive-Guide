@@ -19,9 +19,9 @@ class ProductBuyerTransactionController extends ApiController
         //using the transformer
         $this->middleware('transform.input:' . TransactionTransformer::class)->only(['store']);
 
-        //restricting the action that needs the 'purchase-product'
-        $this->middleware('scope:purchase-product')->only(['store']);//stating the scope
-        $this->middleware('can:purchase,buyer')->only('store');
+//        //restricting the action that needs the 'purchase-product'
+//        $this->middleware('scope:purchase-product')->only(['store']);//stating the scope
+//        $this->middleware('can:purchase,buyer')->only('store');
     }
 
     /**
@@ -36,7 +36,7 @@ class ProductBuyerTransactionController extends ApiController
     public function store(Request $request, Product $product, User $buyer)
     {
         $rules = [
-            'quantity' => 'required|integer|min:1',
+            'quantity' => ['required','integer','min:1'],
         ];
 
         $this->validate($request, $rules);
@@ -79,5 +79,6 @@ class ProductBuyerTransactionController extends ApiController
 
             return $this->showOne($transaction, 201);
         });
+
     }
 }

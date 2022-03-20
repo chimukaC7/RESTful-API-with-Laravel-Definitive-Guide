@@ -11,8 +11,8 @@ class SellerCategoryController extends ApiController
     public function __construct()
     {
         parent::__construct();
-        $this->middleware('scope:read-general')->only('index');
-        $this->middleware('can:view,seller')->only('index');
+//        $this->middleware('scope:read-general')->only('index');
+//        $this->middleware('can:view,seller')->only('index');
     }
     
     /**
@@ -28,7 +28,7 @@ class SellerCategoryController extends ApiController
             ->with('categories')
             ->get()
             ->pluck('categories')
-            ->collapse()
+            ->collapse()//create a unique list with several lists
             ->unique('id')
             ->values();//remove the empty values using values()
 

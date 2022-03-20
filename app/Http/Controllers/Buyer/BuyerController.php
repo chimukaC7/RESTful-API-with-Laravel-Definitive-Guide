@@ -10,9 +10,9 @@ class BuyerController extends ApiController
 {
     public function __construct()
     {
-        parent::__construct();
-        $this->middleware('scope:read-general')->only('index');
-        $this->middleware('can:view,buyer')->only('show');
+//        parent::__construct();
+//        $this->middleware('scope:read-general')->only('index');
+//        $this->middleware('can:view,buyer')->only('show');
     }
 
     /**
@@ -23,7 +23,7 @@ class BuyerController extends ApiController
      */
     public function index()
     {
-        $this->allowedAdminAction();
+//        $this->allowedAdminAction();
 
         //so to be sure that a user is a buyer, we need to verify if that specific user has a transaction.
         $buyers = Buyer::has('transactions')->get();

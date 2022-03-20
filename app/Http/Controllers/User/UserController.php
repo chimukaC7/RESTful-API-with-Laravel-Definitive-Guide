@@ -14,16 +14,16 @@ class UserController extends ApiController
 {
     public function __construct()
     {
-        $this->middleware('client.credentials')->only(['resend']);
-        $this->middleware('auth:api')->except(['showRegisterForm', 'store', 'verify', 'resend']);
-
-        //using the transformer to fix the problem when validating as well as storing and updating
-        $this->middleware('transform.input:' . UserTransformer::class)->only(['update']);
-
-        $this->middleware('scope:manage-account')->only(['show', 'update']);
-        $this->middleware('can:view,user')->only('show');
-        $this->middleware('can:update,user')->only('update');
-        $this->middleware('can:delete,user')->only('destroy');
+//        $this->middleware('client.credentials')->only(['resend']);
+//        $this->middleware('auth:api')->except(['showRegisterForm', 'store', 'verify', 'resend']);
+//
+//        //using the transformer to fix the problem when validating as well as storing and updating
+//        $this->middleware('transform.input:' . UserTransformer::class)->only(['update']);
+//
+//        $this->middleware('scope:manage-account')->only(['show', 'update']);
+//        $this->middleware('can:view,user')->only('show');
+//        $this->middleware('can:update,user')->only('update');
+//        $this->middleware('can:delete,user')->only('destroy');
     }
 
     /**
@@ -92,7 +92,7 @@ class UserController extends ApiController
     public function show(User $user)//using laravel implicit model binding by injecting the model
     {
 
-        //$user = User::findOrFail($id);//no longer needed, laravel will do automatically
+        //$user = User::findOrFail($id);//no longer needed, laravel will do automatically using implicit model binding
 
         //return response()->json(['date'=>$user],200);
         return $this->showOne($user);//using the Laravel Model Binding

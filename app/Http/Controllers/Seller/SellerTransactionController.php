@@ -10,9 +10,9 @@ class SellerTransactionController extends ApiController
 {
     public function __construct()
     {
-        parent::__construct();
-        $this->middleware('scope:read-general')->only('index');
-        $this->middleware('can:view,seller')->only('index');
+//        parent::__construct();
+//        $this->middleware('scope:read-general')->only('index');
+//        $this->middleware('can:view,seller')->only('index');
     }
 
     /**
@@ -29,7 +29,8 @@ class SellerTransactionController extends ApiController
             ->with('transactions')
             ->get()
             ->pluck('transactions')
-            ->collapse();
+            ->collapse()
+        ;
 
         return $this->showAll($transactions);
     }

@@ -10,9 +10,9 @@ class BuyerProductController extends ApiController
 {
     public function __construct()
     {
-        parent::__construct();
-        $this->middleware('scope:read-general')->only('index');
-        $this->middleware('can:view,buyer')->only('index');
+//        parent::__construct();
+//        $this->middleware('scope:read-general')->only('index');
+//        $this->middleware('can:view,buyer')->only('index');
     }
     
     /**
@@ -27,7 +27,7 @@ class BuyerProductController extends ApiController
 
         //list of products for a specific buyer
         //eager loading to fetch directly the product within every transaction
-        $products = $buyer->transactions()
+        $products = $buyer->transactions()//query builder for the transactions
             ->with('product')//calling the product relation inside the transaction
             ->get()
             ->pluck('product');//instead of displaying the transactions, display only the products of those transactions
