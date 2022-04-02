@@ -8,6 +8,7 @@
 Homestead.json
 .env
 *.sublime-*
+package-lock.json
 
 # Don't track content of these folders #
 ############################################
