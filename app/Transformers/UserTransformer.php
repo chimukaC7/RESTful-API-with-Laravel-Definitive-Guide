@@ -25,6 +25,7 @@ class UserTransformer extends TransformerAbstract
             'deletedDate' => isset($user->deleted_at) ? (string) $user->deleted_at : null,//this field can be null
 
             //HATEOS a way to navigate the API
+            //we don't have any kind of relationship directly btn the user and any other model
             'links' => [
                 [
                     'rel' => 'self',

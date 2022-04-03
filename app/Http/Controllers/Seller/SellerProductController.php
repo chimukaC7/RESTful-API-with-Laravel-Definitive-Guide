@@ -16,10 +16,10 @@ class SellerProductController extends ApiController
 {
     public function __construct()
     {
-        //parent::__construct();
+//        parent::__construct();//invoking the $this->middleware('auth:api') found in the parent controller across all actions
 
 //        //using the transformer
-//        $this->middleware('transform.input:' . ProductTransformer::class)->only(['store', 'update']);
+        $this->middleware('transform.input:' . ProductTransformer::class)->only(['store', 'update']);
 //
 //        //restricting the action that needs the 'manage-products'
 //        $this->middleware('scope:manage-products')->except('index');
@@ -77,6 +77,7 @@ class SellerProductController extends ApiController
 
         //$data['image'] = $request->image->store('path','images');//store('path','file system to use')
         //path is calculated from relatively from the file system config, the public folder
+
         //storing an image when creating a product
         $data['image'] = $request->image->store('');//store('path','file system to use')
 

@@ -33,7 +33,7 @@ trait ApiResponser
 
     protected function showAll(Collection $collection, $code = 200)
     {
-        if ($collection->isEmpty()) {//since we are using the first element, what happens if it is empty
+        if ($collection->isEmpty()) {//since we are using the first element in the transformer, what happens if it is empty
             return $this->successResponse(['data' => $collection], $code);
         }
 
@@ -50,14 +50,20 @@ trait ApiResponser
         return $this->successResponse($collection, $code);
     }
 
+//    protected function showOne(Model $model, $code = 200)
+//    {
+//        return $this->successResponse(['data' => $model], $code);
+//    }
+
     //changed from $modal to $instance
-    protected function showOne(Model $instance, $code = 200)
+    protected function showOne(Model $model, $code = 200)
     {
-        $transformer = $instance->transformer;
+        $transformer = $model->transformer;
 
-        $instance = $this->transformData($instance, $transformer);
+        $model = $this->transformData($model, $transformer);
 
-        return $this->successResponse($instance, $code);
+        //fractal automatically includes the data
+        return $this->successResponse($model, $code);
     }
 
     protected function showMessage($message, $code = 200)
@@ -67,10 +73,11 @@ trait ApiResponser
 
     protected function filterData(Collection $collection, $transformer)
     {
+        //go through every query parameter
         foreach (request()->query() as $query => $value) {
             $attribute = $transformer::originalAttribute($query);//retrieving the attribute
 
-            if (isset($attribute, $value)) {
+            if (isset($attribute, $value)) {//if both the attribute and value are set
                 $collection = $collection->where($attribute, $value);
             }
         }
@@ -82,7 +89,11 @@ trait ApiResponser
     protected function sortData(Collection $collection, $transformer)
     {
         if (request()->has('sort_by')) {
-            //$attribute = request()->sort_by;//sorting using the original model's method
+
+            //sorting using the original model's method
+//            $attribute = request()->sort_by;
+//            $collection = $collection->sortBy($attribute);
+
             $attribute = $transformer::originalAttribute(request()->sort_by);//sorting using the transformed attributes
 
             $collection = $collection->sortBy->{$attribute};
@@ -92,6 +103,7 @@ trait ApiResponser
     }
 
     //can be used independently
+    //this paginate method is suitable for any collection as compared to paginate which is suitable for direct eloquent collections
     protected function paginate(Collection $collection)
     {
         $rules = [
@@ -116,7 +128,7 @@ trait ApiResponser
                 'path' => LengthAwarePaginator::resolveCurrentPath(),
             ]);
 
-        $paginated->appends(request()->all());//include the other request parameters
+        $paginated->appends(request()->all());//include the other request parameters(query parameters)
 
         return $paginated;
 
@@ -135,9 +147,9 @@ trait ApiResponser
         $url = request()->url();//differentiate one request from another
         $queryParams = request()->query();//taking into account the url params
 
-        ksort($queryParams);//sort the query params
+        ksort($queryParams);//sort the query params, so that the combination of query params can be the same
 
-        $queryString = http_build_query($queryParams);
+        $queryString = http_build_query([$queryParams]);
 
         $fullUrl = "{$url}?{$queryString}";
 

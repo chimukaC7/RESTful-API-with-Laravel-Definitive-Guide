@@ -45,8 +45,8 @@ class Kernel extends HttpKernel
         //order matters
         'api' => [
             'cors',//added
-            'signature:X-Application-Name',//receives a single parameter
-            'throttle:90,1',//receives two parameters
+            'signature:X-Application-Name',//receives a single parameter, an after middleware, acts on the response
+            'throttle:90,1',//receives two parameters,max attempts, decay minutes
             'bindings',
         ],
     ];
@@ -67,7 +67,8 @@ class Kernel extends HttpKernel
         'cors' => \Barryvdh\Cors\HandleCors::class,//added
         'client.credentials' => \Laravel\Passport\Http\Middleware\CheckClientCredentials::class,//added
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
-        'throttle' => \App\Http\Middleware\CustomThrottleRequests::class,
+        //'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'throttle' => \App\Http\Middleware\CustomThrottleRequests::class,//replaced the original
         'scope' => \Laravel\Passport\Http\Middleware\CheckForAnyScope::class,//registering checkForAnyScope middleware
         'scopes' => \Laravel\Passport\Http\Middleware\CheckScopes::class,//registering
         'signature' => \App\Http\Middleware\SignatureMiddleware::class,//added

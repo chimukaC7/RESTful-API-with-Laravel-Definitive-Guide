@@ -10,6 +10,7 @@ class CategoryProductController extends ApiController
 {
     public function __construct()
     {
+        //using client credentials grant to protect some routes
 //        $this->middleware('client.credentials')->only(['index']);
     }
 

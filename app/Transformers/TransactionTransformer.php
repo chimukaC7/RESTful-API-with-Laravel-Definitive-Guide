@@ -37,7 +37,7 @@ class TransactionTransformer extends TransformerAbstract
                     'href' => route('transactions.sellers.index', $transaction->id),
                 ],
                 [
-                    'rel' => 'buyer',
+                    'rel' => 'buyer',//we do not need anything about the transaction to obtain the buyer
                     'href' => route('buyers.show', $transaction->buyer_id),
                 ],
                 [

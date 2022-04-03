@@ -18,6 +18,8 @@ class ApiController extends Controller
 
     public function __construct()
     {
+        //is going to require an access token that has related the user information.
+        //That means that an access token obtained using only client
     	$this->middleware('auth:api');//protecting all the routes of the API
     }
 

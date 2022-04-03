@@ -47,6 +47,7 @@ class AuthServiceProvider extends ServiceProvider
 
         //add the following for passport
         Passport::routes();//registering routes for passport
+        //This method will register the routes necessary to issue access tokens and revoke access tokens, clients, and personal access tokens:
         Passport::tokensExpireIn(Carbon::now()->addMinutes(5));//to make tokens expire
         Passport::refreshTokensExpireIn(Carbon::now()->addDays(30));
         Passport::enableImplicitGrant();//allowing implicit grant type

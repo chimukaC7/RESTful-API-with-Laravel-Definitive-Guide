@@ -83,12 +83,12 @@ class Handler extends ExceptionHandler
     private function isFrontend($request)
     {
         //check if request are coming from the web
+        //it is frontend if the request accepts HTML and/or the request is a web request
         return $request->acceptsHtml() && collect($request->route()->middleware())->contains('web');
     }
 
     public function handleException($request, Exception $exception)// replace Exception with Throwable
     {
-
         //ensure exceptions are sent as json
         //Create a response object from the given validation exception.
         if ($exception instanceof ValidationException) {
@@ -98,7 +98,7 @@ class Handler extends ExceptionHandler
                 //if an ajax request or frontend request
                 return $request->ajax()
                     ? response()->json($errors, 422)
-                    : redirect()->back()->withInput($request->input())->withErrors($errors);
+                    : redirect()->back()->withInput($request->input())->withErrors($errors);//redirect back with the inputs and list of errors
             }
 
             return $this->errorResponse($errors, 422);
@@ -113,7 +113,7 @@ class Handler extends ExceptionHandler
         //* Convert an authentication exception into an unauthenticated response.
         if ($exception instanceof AuthenticationException) {
 
-            if ($this->isFrontend($request)) {
+            if ($this->isFrontend($request)) {//if frontend redirect back to login page
                 return redirect()->guest('login');
             }
 
@@ -142,7 +142,6 @@ class Handler extends ExceptionHandler
 
         //handles the foreign key constraint violation during an update but more importantly duly a delete
         if ($exception instanceof QueryException) {//Query exception
-
             //$errorCode = $exception->errorInfo[1];
 
             if ($exception->errorInfo[1] == 1451) {//we are only handling errors related to this code

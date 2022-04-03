@@ -18,6 +18,7 @@ class CustomThrottleRequests extends ThrottleRequests
      */
     protected function buildResponse($key, $maxAttempts)
     {
+        //if you are in Laravel 5.5 you do not need to follow this
         $response = $this->errorResponse('Too Many Attempts.', 429);
 
         $retryAfter = $this->limiter->availableIn($key);

@@ -14,7 +14,7 @@ class ProductBuyerTransactionController extends ApiController
 {
     public function __construct()
     {
-        parent::__construct();
+//        parent::__construct();//invoking the $this->middleware('auth:api') found in the parent controller across all actions
 
         //using the transformer
         $this->middleware('transform.input:' . TransactionTransformer::class)->only(['store']);

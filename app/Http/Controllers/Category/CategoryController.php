@@ -11,8 +11,13 @@ class CategoryController extends ApiController//to use the response methods reme
 {
     public function __construct()
     {
-//        $this->middleware('client.credentials')->only(['index', 'show']);//specifying which routes to protect
-//        $this->middleware('auth:api')->except(['index', 'show']);
+        //using client credentials grant to protect some routes
+//        $this->middleware('client.credentials')->only(['index', 'show']);//specifying which routes to protect using client credentials
+
+        //is going to require an access token that has related the user information.
+        //That means that an access token obtained using only client credentials is not going to work.
+//        $this->middleware('auth:api')->except(['index', 'show']);// specifying which routes to protect using password credentials
+
 //        //using the transformer
 //        $this->middleware('transform.input:' . CategoryTransformer::class)->only(['store', 'update']);
     }

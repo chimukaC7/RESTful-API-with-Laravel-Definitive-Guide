@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
-use Laravel\Passport\HasApiTokens;
+use Laravel\Passport\HasApiTokens;//ensure to import from Passport
 
 class User extends Authenticatable
 {
@@ -24,7 +24,9 @@ class User extends Authenticatable
     const REGULAR_USER = 'false';
 
     public $transformer = UserTransformer::class;//Linking the model with its respective transformer
+
     protected $table = 'users';//ensure seller and buyer modals do not attempt to create their own table
+
     protected $dates = ['deleted_at'];
 
     /**

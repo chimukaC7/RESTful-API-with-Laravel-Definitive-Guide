@@ -11,8 +11,11 @@ class ProductCategoryController extends ApiController
 {
     public function __construct()
     {
-//        $this->middleware('client.credentials')->only(['index']);
-//        $this->middleware('auth:api')->except(['index']);
+        //using client credentials grant to protect some routes
+//        $this->middleware('client.credentials')->only(['index']);//specifying which routes to protect using the client credentials
+
+//        $this->middleware('auth:api')->except(['index']);//specifying which routes to protect using the password credentials
+
 //        //restricting the actions that need the 'manage-product'
 //        $this->middleware('scope:manage-products')->except('index');
 //        $this->middleware('can:add-category,product')->only('update');

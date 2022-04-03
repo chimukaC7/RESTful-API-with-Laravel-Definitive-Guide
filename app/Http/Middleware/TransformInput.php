@@ -38,7 +38,9 @@ class TransformInput
                 $transformedField = $transformer::transformedAttribute($field);//get the transformed name of the field
                 $transformedErrors[$transformedField] = str_replace($field, $transformedField, $error);//replacing the
             }
+
             $data->error = $transformedErrors;
+
             $response->setData($data);
         }
         return $response;

@@ -44,6 +44,7 @@ class ProductTransformer extends TransformerAbstract
                     'href' => route('products.transactions.index', $product->id),
                 ],
                 [
+                    //special case
                     'rel' => 'seller',
                     'href' => route('sellers.show', $product->seller_id),//notice
                 ],

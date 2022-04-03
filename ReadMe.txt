@@ -195,6 +195,9 @@ $ php artisan passport:install
 
 Obtaining and using tokens using client credentials
 $ php artisan passport:client
+-pick the id i.e use 0 for auto assign
+-pick the client name
+-pick the redirect url
 
 Using the password Grant Type
 $ php artisan passport:client --password

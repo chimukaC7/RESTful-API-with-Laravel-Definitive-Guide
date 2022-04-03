@@ -21,7 +21,7 @@ class SignatureMiddleware
         $response = $next($request);
 
         //adding a custom header
-        $response->headers->set($headerName, config('app.name'));
+        $response->headers->set($headerName, config('app.name'));//the name of our application
 
         return $response;
     }

@@ -20,6 +20,7 @@ class AppServiceProvider extends ServiceProvider
 
         //send verification using events
         /*User::created(function($user) {
+            //dealing with failing prone actions
             retry(5, function() use ($user) {
                 Mail::to($user->email)->send(new UserCreated($user));
             }, 100);

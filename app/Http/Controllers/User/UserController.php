@@ -18,7 +18,7 @@ class UserController extends ApiController
 //        $this->middleware('auth:api')->except(['showRegisterForm', 'store', 'verify', 'resend']);
 //
 //        //using the transformer to fix the problem when validating as well as storing and updating
-//        $this->middleware('transform.input:' . UserTransformer::class)->only(['update']);
+        $this->middleware('transform.input:' . UserTransformer::class)->only(['update']);//middle going to be executed over store and update
 //
 //        $this->middleware('scope:manage-account')->only(['show', 'update']);
 //        $this->middleware('can:view,user')->only('show');
@@ -34,7 +34,7 @@ class UserController extends ApiController
      */
     public function index()
     {
-        $this->allowedAdminAction();
+        //$this->allowedAdminAction();
         
         $users = User::all();
 
