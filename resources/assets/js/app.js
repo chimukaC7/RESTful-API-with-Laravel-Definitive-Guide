@@ -13,16 +13,17 @@ require('./bootstrap');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+//register the vue components
 Vue.component(
-	'passport-personal-access-tokens',
+	'passport-personal-access-tokens',//name
 	require('./components/passport/PersonalAccessTokens.vue'));
 
 Vue.component(
-	'passport-clients',
+	'passport-clients',//name
 	require('./components/passport/Clients.vue'));
 
 Vue.component(
-	'passport-authorized-clients',
+	'passport-authorized-clients',//name
 	require('./components/passport/AuthorizedClients.vue'));
 
 //testing

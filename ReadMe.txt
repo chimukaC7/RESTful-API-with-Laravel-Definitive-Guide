@@ -193,20 +193,32 @@ $ composer require laravel/passport
 $ php artisan migrate
 $ php artisan passport:install
 
-Obtaining and using tokens using client credentials
+Obtaining and using tokens using the Client Credentials Grant Type
 $ php artisan passport:client
 -pick the id i.e use 0 for auto assign
 -pick the client name
 -pick the redirect url
 
-Using the password Grant Type
+Obtaining and using tokens using the Password Grant Type
 $ php artisan passport:client --password
 
 Preparing the API to Use the Passport Components
+//Basically, those components are going to allow us to create very nice views in order to manage the
+  clients, the personal access tokens and any other things, and those companies are being created by default
 $ php artisan vendor:publish --tag=passport-components
 $ npm install
 $ npm run dev
 $ npm watch
+
+Obtaining and using tokens using the Personal Token
+//now remember that the personal access tokens have not expiration time.
+// It means they are valid forever, unless that you remove these, of course, and they are intended only
+// for testing purposes or just to provide some specific access to the user.
+// But remember, that can be a little insecure.
+// You cannot trust completely in your user.
+// So just use it if you are completely assured of that.
+// if you don't want to use personal tokens, do not register a personal client in your cmd.
+$ php artisan passport:client --personal
 
 
 $ php artisan make:policy --help
