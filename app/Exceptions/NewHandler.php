@@ -13,6 +13,8 @@ class Handler extends ExceptionHandler
     use ApiResponser;
     /**
      * A list of the exception types that should not be reported.
+     * After Laravel 8, the Handler was pretty simplified, but Laravel still calls the render() method behind the scenes.
+        So you can copy and paste the render() and even the report() methods if you prefer.
      *
      * @var array
      */
