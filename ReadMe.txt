@@ -155,6 +155,8 @@ $ php artisan make:middleware SignatureMiddleware
 $ php artisan make:middleware CustomThrottleRequests
 
 $ composer require spatie/laravel-fractal
+-Resources are for some people a replacement for Laravel fractal or php fractal.
+ And probably the resources are a replacement, but in my opinion, not completely yet.
 
 $ php artisan make:transformer UserTransformer
 $ php artisan make:transformer BuyerTransformer
@@ -193,6 +195,8 @@ $ composer require laravel/passport
 $ php artisan migrate
 $ php artisan passport:install
 
+remember a client is acting as a user with their respective permissions or basically scoop's that the user provides.
+
 Obtaining and using tokens using the Client Credentials Grant Type
 $ php artisan passport:client
 -pick the id i.e use 0 for auto assign
@@ -220,9 +224,18 @@ Obtaining and using tokens using the Personal Token
 // if you don't want to use personal tokens, do not register a personal client in your cmd.
 $ php artisan passport:client --personal
 
+Gates and Policy
+-define specific conditions that need to be accomplished by any specific user or any specific resource to perform something
+
 
 $ php artisan make:policy --help
 $ php artisan make:policy BuyerPolicy --model=Buyer
 $ php artisan make:policy SellerPolicy --model=Seller
 $ php artisan make:policy UserPolicy --model=User
 $ php artisan make:policy TransactionPolicy --model=Transaction
+
+$ composer require barryvdh/laravel-cors
+$ php artisan vendor:publish --provider="Barryvdh\Cors\ServiceProvider"
+
+
+$ composer require laravel/passport guzzlehttp/guzzle spatie/laravel-fractal barryvdh/laravel-cors

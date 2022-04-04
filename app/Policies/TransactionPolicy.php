@@ -20,6 +20,7 @@ class TransactionPolicy
      */
     public function view(User $user, Transaction $transaction)
     {
+        //buyer can obtain the information and the seller can obtain the information
         return $user->id === $transaction->buyer->id || $user->id === $transaction->product->seller->id;
     }
 }

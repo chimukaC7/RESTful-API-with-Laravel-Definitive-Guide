@@ -12,7 +12,8 @@ class SellerController extends ApiController
     {
 //        parent::__construct();//invoking the $this->middleware('auth:api') found in the parent controller across all actions
 
-//        $this->middleware('scope:read-general')->only('show');
+//        $this->middleware('scope:read-general')->only('show');//further, restricting what the client can do
+
 //        $this->middleware('can:view,seller')->only('show');
     }
     

@@ -17,7 +17,8 @@ class ProductCategoryController extends ApiController
 //        $this->middleware('auth:api')->except(['index']);//specifying which routes to protect using the password credentials
 
 //        //restricting the actions that need the 'manage-product'
-//        $this->middleware('scope:manage-products')->except('index');
+//        $this->middleware('scope:manage-products')->except('index');//further, restricting what the client can do
+
 //        $this->middleware('can:add-category,product')->only('update');
 //        $this->middleware('can:delete-category,product')->only('destroy');
     }

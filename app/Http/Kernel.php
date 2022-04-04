@@ -69,8 +69,8 @@ class Kernel extends HttpKernel
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         //'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'throttle' => \App\Http\Middleware\CustomThrottleRequests::class,//replaced the original
-        'scope' => \Laravel\Passport\Http\Middleware\CheckForAnyScope::class,//registering checkForAnyScope middleware
-        'scopes' => \Laravel\Passport\Http\Middleware\CheckScopes::class,//registering
+        'scope' => \Laravel\Passport\Http\Middleware\CheckForAnyScope::class,//registering checkForAnyScope middleware (Scope is going to verify that a specific access token from their request has at least one of the scope)
+        'scopes' => \Laravel\Passport\Http\Middleware\CheckScopes::class,//registering (it is going to verify if that single access token has all the scoops that we need)
         'signature' => \App\Http\Middleware\SignatureMiddleware::class,//added
         'transform.input' => \App\Http\Middleware\TransformInput::class,//registering a middleware
     ];

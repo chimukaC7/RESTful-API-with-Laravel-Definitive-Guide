@@ -20,7 +20,7 @@ class ProductBuyerTransactionController extends ApiController
         $this->middleware('transform.input:' . TransactionTransformer::class)->only(['store']);
 
 //        //restricting the action that needs the 'purchase-product'
-//        $this->middleware('scope:purchase-product')->only(['store']);//stating the scope
+//        $this->middleware('scope:purchase-product')->only(['store']);//stating the scope //further, restricting what the client can do
 //        $this->middleware('can:purchase,buyer')->only('store');
     }
 

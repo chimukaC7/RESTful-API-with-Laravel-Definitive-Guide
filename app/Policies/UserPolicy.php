@@ -43,6 +43,7 @@ class UserPolicy
      */
     public function delete(User $authenticatedUser, User $user)
     {
+        //ensuring that the token type is personal access client
         return $authenticatedUser->id === $user->id && $authenticatedUser->token()->client->personal_access_client;
     }
 
